@@ -111,6 +111,17 @@ in `evidence/`. These are retrospective measurements on logged winning inventory
 unobserved lost-auction outcomes and limited test dates restrict conclusions about
 live auction performance.
 
+Regenerate both report figures from the published evidence (no data download or
+training required):
+
+```sh
+python -m experiments.plot_results
+```
+
+Figure 1 is written to `results/figures/nominal.png` using `evidence/nominal.csv`
+and `evidence/result.json`. Figure 2 is written to `results/figures/stress.png`
+using `evidence/evaluation.csv`.
+
 ## Documentation
 
 - [Methodology](docs/methodology.md): environment, algorithms and experimental protocol.

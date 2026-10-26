@@ -113,7 +113,7 @@ differ between the candidate pipelines.
 ## Evaluation
 
 Evaluate nominal replay and six declared transformations: prices ×1.5, evening
-inventory ×3, budget fractions .15/.60, click thinning ×.5 and coverage ×.5.
+inventory ×3, budget fractions .15/.60, click retention 50% and coverage 50%.
 Repeated/thinned inventory is synthetic stress, not additional independent data.
 
 Metrics include mean/total clicks, spending, utilization and violations. Paired
