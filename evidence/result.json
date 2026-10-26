@@ -1,0 +1,45 @@
+{
+  "decisions": [
+    {
+      "season": 1,
+      "selected_rl": "sampled_q",
+      "selected_clicks": 131.88888888888889,
+      "reference": "mpc",
+      "reference_clicks": 128.55555555555554,
+      "highest_observed_baseline": "mpc",
+      "highest_baseline_clicks": 128.55555555555554,
+      "shared_rl": "campaign_dqn",
+      "shared_clicks": 130.11111111111111
+    },
+    {
+      "season": 2,
+      "selected_rl": "campaign_dqn",
+      "selected_clicks": 76.33333333333333,
+      "reference": "budget_linear",
+      "reference_clicks": 63.46666666666667,
+      "highest_observed_baseline": "linear",
+      "highest_baseline_clicks": 75.86666666666666,
+      "shared_rl": "campaign_dqn",
+      "shared_clicks": 76.33333333333333
+    },
+    {
+      "season": 3,
+      "selected_rl": "campaign_dqn",
+      "selected_clicks": 41.0,
+      "reference": "market_linear",
+      "reference_clicks": 52.3,
+      "highest_observed_baseline": "budget_linear",
+      "highest_baseline_clicks": 53.4,
+      "shared_rl": "campaign_dqn",
+      "shared_clicks": 41.0
+    }
+  ],
+  "claims": {
+    "seasonal_selected_beats_reference_all_seasons": false,
+    "seasonal_selected_beats_every_baseline_all_seasons": false,
+    "shared_algorithm_beats_every_baseline_all_seasons": false,
+    "every_rl_beats_every_baseline_all_seasons": false
+  },
+  "disclosure": "Retrospective comparison on public data, not a blind prospective test. Imported neural checkpoints retain their original multi-condition forward-validation stopping rule; sampled-Q settings use nominal CV. Current algorithm selection replays nominal CV for all methods. No test-based selection or guaranteed RL superiority. Separate agents train within each season.",
+  "uncertainty": "Paired date-cluster bootstrap; few dates; descriptive, unadjusted."
+}

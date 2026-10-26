@@ -1,0 +1,21 @@
+{
+  "agents/comparison/season1_traffic_dqn.npz": "ee4c2c5881ab0eb081fef1339d135688fc0684dfe6c26c2b761ea0f56112b460",
+  "agents/comparison/season1_campaign_dqn.npz": "e73e1bc92430fe4042ab0982089d4069484c9eabc45f9cedd070ca52a407aca6",
+  "agents/comparison/season1_sampled_q.npz": "9b3672ab347c1a272d6d1d3748cfe7df92e0502151316e7e6587af2aea41aee5",
+  "agents/comparison/season2_traffic_dqn.npz": "97a0c6faa5ea0d7d61d587c7fdbcf55627c09fa6463a923d84e7791b2cbb3330",
+  "agents/comparison/season2_campaign_dqn.npz": "c077722ae60fe1186f7e23354d3cb7bb4f121ff4f28360ea618cfa56f56db366",
+  "agents/comparison/season2_sampled_q.npz": "1d7c65e9ddaf97a26d96eec1819d0e17e7653c37a2c1e22e55a2b086cc9bc645",
+  "agents/comparison/season3_traffic_dqn.npz": "6d6ada308562bebb3822169227a9b93730b21d02145899ed754e9aa45751c6a5",
+  "agents/comparison/season3_campaign_dqn.npz": "02a5a8888021c013ca11168587e5b746e515fff160972aaf47dcfdecd373996e",
+  "agents/comparison/season3_sampled_q.npz": "2ea733d86d4ad949369bcac1856256347a55cec7b643af1026c213d928d5c01e",
+  "evidence/study.json": "2be22af3759a1de818db270ead267e5b92c9f20989ef2d587c045a39dd3b4499",
+  "evidence/evaluation.csv": "70ee10637b8b826e107d868431105b770b6d96db9b24f410068361b9ad3c7a16",
+  "evidence/summary.csv": "7a4256429365a7392fcb280f2204b9a328d002e6330173d573c00734e67e4297",
+  "evidence/nominal.csv": "2b008d5db8096ec88a7f258abbc2cd7bfef0fbd4456ebc4d87004645def821b7",
+  "evidence/comparisons.csv": "f2eae395eff3977b5b8e69191df3e7ef3a916f161ecc897e27ec7c34caf90e6f",
+  "evidence/result.json": "2fca9fad50d778662ea504c6e80e537b57775b460c8f1871e4edaf323dd2dc79",
+  "evidence/shared_selection.json": "a646e1b1d3e7040faa18adbaaf1620ba07bb80f7b728ec2ddf5ba1da50a13cc4",
+  "evidence/nominal.png": "ef91bd56615f3e11572421238619913fc28e70beaa77fae82acacc8aaca6a4fa",
+  "evidence/validation.csv": "74f197f6a197d038ad92bd3ca078963fb50673129f9c48c3b13ce13bcf004bf5",
+  "evidence/selection.json": "c87c166c190446264e4b8d39386f071d4a0fc69237ab43b17737dff229091c36"
+}

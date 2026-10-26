@@ -1,0 +1,508 @@
+{
+  "configs": {
+    "1": {
+      "data_file": "data/season1/replay.npz",
+      "development_dates": [
+        20130311,
+        20130312,
+        20130313,
+        20130314,
+        20130315,
+        20130316,
+        20130317
+      ],
+      "test_dates": [
+        20130318,
+        20130319,
+        20130320
+      ],
+      "cv_validation_dates": [
+        20130315,
+        20130316,
+        20130317
+      ],
+      "seeds": [
+        11,
+        23,
+        37,
+        53,
+        71
+      ],
+      "workers": 4,
+      "gamma": 1.0,
+      "evaluation_budget_fraction": 0.3,
+      "domain_randomization": {
+        "budget": [
+          0.18,
+          0.5
+        ],
+        "competition": [
+          0.85,
+          1.25
+        ],
+        "coverage": [
+          0.35,
+          1.0
+        ]
+      },
+      "validation_conditions": [
+        {
+          "budget_fraction": 0.2
+        },
+        {
+          "budget_fraction": 0.3
+        },
+        {
+          "budget_fraction": 0.45
+        },
+        {
+          "budget_fraction": 0.3,
+          "competition": 1.2
+        },
+        {
+          "budget_fraction": 0.3,
+          "coverage": 0.5
+        },
+        {
+          "budget_fraction": 0.3,
+          "coverage": 0.75
+        }
+      ],
+      "dqn": {
+        "episodes": 6000,
+        "checkpoints": [
+          0,
+          1500,
+          3000,
+          6000
+        ],
+        "replay_capacity": 80000,
+        "nstep": 3,
+        "warmup": 512,
+        "update_every": 4,
+        "batch_size": 64,
+        "learning_rate": 0.0005,
+        "target_every_updates": 250,
+        "epsilon_final": 0.05
+      },
+      "traffic_baselines": true,
+      "selection_penalty": 0.5,
+      "selection_reference": "best_baseline",
+      "data_scope": "Public Season 1 chronological replication; all available priced impressions/clicks; public leaderboard admitted only after development. Prior project results informed this study; not an untouched blind test.",
+      "variants": [
+        "traffic_dqn",
+        "campaign_dqn"
+      ]
+    },
+    "2": {
+      "data_file": "data/season2/replay.npz",
+      "development_dates": [
+        20130606,
+        20130607,
+        20130608,
+        20130609,
+        20130610,
+        20130611,
+        20130612
+      ],
+      "test_dates": [
+        20130613,
+        20130614,
+        20130615
+      ],
+      "cv_validation_dates": [
+        20130610,
+        20130611,
+        20130612
+      ],
+      "seeds": [
+        11,
+        23,
+        37,
+        53,
+        71
+      ],
+      "workers": 4,
+      "gamma": 1.0,
+      "evaluation_budget_fraction": 0.3,
+      "domain_randomization": {
+        "budget": [
+          0.18,
+          0.5
+        ],
+        "competition": [
+          0.85,
+          1.25
+        ],
+        "coverage": [
+          0.35,
+          1.0
+        ]
+      },
+      "validation_conditions": [
+        {
+          "budget_fraction": 0.2
+        },
+        {
+          "budget_fraction": 0.3
+        },
+        {
+          "budget_fraction": 0.45
+        },
+        {
+          "budget_fraction": 0.3,
+          "competition": 1.2
+        },
+        {
+          "budget_fraction": 0.3,
+          "coverage": 0.5
+        },
+        {
+          "budget_fraction": 0.3,
+          "coverage": 0.75
+        }
+      ],
+      "dqn": {
+        "episodes": 6000,
+        "checkpoints": [
+          0,
+          1500,
+          3000,
+          6000
+        ],
+        "replay_capacity": 80000,
+        "nstep": 3,
+        "warmup": 512,
+        "update_every": 4,
+        "batch_size": 64,
+        "learning_rate": 0.0005,
+        "target_every_updates": 250,
+        "epsilon_final": 0.05
+      },
+      "traffic_baselines": true,
+      "selection_penalty": 0.5,
+      "selection_reference": "best_baseline",
+      "data_scope": "Public Season 2 chronological replication; all available priced impressions/clicks; public leaderboard admitted only after development. Prior project results informed this study; not an untouched blind test.",
+      "variants": [
+        "traffic_dqn",
+        "campaign_dqn"
+      ]
+    },
+    "3": {
+      "data_file": "data/season3/replay.npz",
+      "development_dates": [
+        20131019,
+        20131020,
+        20131021,
+        20131022,
+        20131023,
+        20131024
+      ],
+      "test_dates": [
+        20131025,
+        20131026,
+        20131027,
+        20131028
+      ],
+      "cv_validation_dates": [
+        20131022,
+        20131023,
+        20131024
+      ],
+      "seeds": [
+        11,
+        23,
+        37,
+        53,
+        71
+      ],
+      "workers": 4,
+      "gamma": 1.0,
+      "evaluation_budget_fraction": 0.3,
+      "domain_randomization": {
+        "budget": [
+          0.18,
+          0.5
+        ],
+        "competition": [
+          0.85,
+          1.25
+        ],
+        "coverage": [
+          0.35,
+          1.0
+        ]
+      },
+      "validation_conditions": [
+        {
+          "budget_fraction": 0.2
+        },
+        {
+          "budget_fraction": 0.3
+        },
+        {
+          "budget_fraction": 0.45
+        },
+        {
+          "budget_fraction": 0.3,
+          "competition": 1.2
+        },
+        {
+          "budget_fraction": 0.3,
+          "coverage": 0.5
+        },
+        {
+          "budget_fraction": 0.3,
+          "coverage": 0.75
+        }
+      ],
+      "dqn": {
+        "episodes": 6000,
+        "checkpoints": [
+          0,
+          1500,
+          3000,
+          6000
+        ],
+        "replay_capacity": 80000,
+        "nstep": 3,
+        "warmup": 512,
+        "update_every": 4,
+        "batch_size": 64,
+        "learning_rate": 0.0005,
+        "target_every_updates": 250,
+        "epsilon_final": 0.05
+      },
+      "traffic_baselines": true,
+      "selection_penalty": 0.5,
+      "selection_reference": "best_baseline",
+      "data_scope": "Public Season 3 chronological replication; all available priced impressions/clicks; public leaderboard admitted only after development. Prior project results informed this study; not an untouched blind test.",
+      "variants": [
+        "traffic_dqn",
+        "campaign_dqn"
+      ]
+    }
+  },
+  "neural_source": "artifacts/neural",
+  "table_source": "artifacts/tabular",
+  "calibrated_source": "artifacts/calibration",
+  "rl_candidates": [
+    "traffic_dqn",
+    "campaign_dqn",
+    "sampled_q"
+  ],
+  "core_baselines": [
+    "constant",
+    "linear",
+    "pid",
+    "mpc"
+  ],
+  "source_sha256": {
+    "bidpace/__init__.py": "711fbc811d46f8beb4d4666d128c09ffc466a7d479daf154dd4b989683433a67",
+    "bidpace/adaptive.py": "3ca7df70b811f307e745e0858767337e5920468b7a9701c280cd2b901c7fcebd",
+    "bidpace/agents.py": "81cf171f461abac89b0bb2cec6e510e633fa55b19470ddd6babc00e3acd349ca",
+    "bidpace/benchmark.py": "b7c47519312f99e06747c247cd52e70b514d6e348598b7db0998ebbe7aa148c5",
+    "bidpace/control.py": "6856d1d4735140f99bbaa1ddd98ae06cc3c196b64e7865a558f2f59beb4a8be4",
+    "bidpace/fetch.py": "2b97f7e388b73ab81e6e67d73ad58d841d6d74b8f58e6c970d74ee278ac195b9",
+    "bidpace/policies.py": "2e8c4d870cfb84f78220e496164d7403cfdcc38f669ab19e1f1877be9406b91d",
+    "bidpace/protocol.py": "62f2b59f6f1637bc5848c7940ac46738a2711320c77f1e5554c53f9ee4146cd3",
+    "bidpace/replay.py": "36c24bcae6b4f9a290bc1fcf4dc77b9f54c44ad30a0d1cf2a9a9386c326910cd",
+    "bidpace/tabular.py": "dec100eaff73de5adc812973905865badc0abc21e4ad479568ccbef284e29cb0",
+    "bidpace/tabular_study.py": "0194252a7a580ef22fb190842f8f25bedc7c25054f6b459c8cf4cbf50276c4f3"
+  },
+  "script_sha256": "ab6db42efcdf48711f6d409d50394a0aa26d77753f8e022f01d59343923b17ab",
+  "calibration_sha256": "eb869998b38acf4f1adc1fae9cae64d9e09b5da089a40866904bfc52a78e092e",
+  "input_hashes": {
+    "artifacts\\tabular\\study.json": "1ffb472a5d51dde471db5272e3bbb8ad977fd5c81f35d6a7d062cd7de2ec53a5",
+    "artifacts\\calibration\\study.json": "39f9fe146783395643f09160e8cb1d7064e29c07e166f884fa8ada37c3ef0f41",
+    "artifacts/tabular/season1/selection.json": "5253934840f78f7283128a23ba51a46f07e6f6e88f7b5099649539222bde72a6",
+    "artifacts/tabular/season1/baselines.json": "9b9c94915fdd2e86c2da54d39242a3443e1a962f3f694db36a674742b2813cd3",
+    "artifacts/tabular/season1/agent.npz": "7188b0395fa5da82ccae5cd4ff40eb202e0b0860f6b448d4416fe9eeabd9789c",
+    "artifacts/tabular/season1/baseline_market.npz": "c1ad2709e352ad9bf316f7492b61d08e56ac770309b355e8765991ef163c8b75",
+    "artifacts/tabular/season1/fold0.json": "59879f4ceb4d3e726bee6230f55f4b76cb45499d5fde235691a84bdbf3d35bed",
+    "artifacts/tabular/season1/fold0.npz": "89cd361cdc4159547aeba184e072fccc94084fd788adc26fff103c9bd89eed78",
+    "artifacts/tabular/season1/fold1.json": "26ccfa922d1e59e2095f7af88522d16da81ba4455d1d660091b9690c163fa525",
+    "artifacts/tabular/season1/fold1.npz": "f190719ea7b763e94a39772dda4fd4b0196c5321de8c3d29d563b6f05187f427",
+    "artifacts/tabular/season1/fold2.json": "cec0d5bd9fe236206534070b079b11a422f32660c48fef8e18d43924b9f75495",
+    "artifacts/tabular/season1/fold2.npz": "6de5e2b92282caf42902ec3db63582932e26c3a540542c5b9993d8c6b61091ff",
+    "artifacts/tabular/season2/selection.json": "bae17254def8cb7378e79173a0e3970461d4e4af410c7b8499e6b9deb6168488",
+    "artifacts/tabular/season2/baselines.json": "b1ad5d051afdf90ce9cf20bd8112cbf7b2ade956d0ba41dbb4933e6eeacb4cd1",
+    "artifacts/tabular/season2/agent.npz": "6a30f9d868f38c97cfb7109da1e49c0dfd006fee6bcd4e48b3f09ce7b58209ab",
+    "artifacts/tabular/season2/baseline_market.npz": "10f3a9560918e55dc4a59a885d7db5332ec69840ca7d37667d93072a03e33664",
+    "artifacts/tabular/season2/fold0.json": "f9b87c7ba76f2953d02fcdc14640d79154adfb8e25a0ef657543daef81b66577",
+    "artifacts/tabular/season2/fold0.npz": "0999ceb1945a1c0f8c0c7d117c7eccaf87a6e4e9a3cccf993495fed67296cf28",
+    "artifacts/tabular/season2/fold1.json": "c054c5bb4778234b1610a1aac4070e71357401c49a60fb1300f2ea67b2d0d461",
+    "artifacts/tabular/season2/fold1.npz": "1f92b08b1931a2b3e6fe0df66482b1dd45b6b0fe36d0acd67f613c71b00f5d18",
+    "artifacts/tabular/season2/fold2.json": "c4fc4a56b884b545d9e1a95530ef7e6a18a6851ceab3efea0906e82749b89e9d",
+    "artifacts/tabular/season2/fold2.npz": "fa7efc47438c7d6055473367a0c6f1075f2f70543116d00f618b3703049c8c95",
+    "artifacts/tabular/season3/selection.json": "549e2e1193ba22bf344caffb19aa77dc9ecdc3b0aa4688a66160c003fa44ccfa",
+    "artifacts/tabular/season3/baselines.json": "b29e3e94888067547af892526ea7453d86ea14b9856f5cab3ea191e74506767e",
+    "artifacts/tabular/season3/agent.npz": "17af1388a00e1feb25b7c46713ed7cfd11429b8d743f481f742569052bcc69d0",
+    "artifacts/tabular/season3/baseline_market.npz": "08e4e1e82b93f126c8459089bf9934a564dd1cf33242dd983f5990de36bcfd25",
+    "artifacts/tabular/season3/fold0.json": "efa1a0b2dbee090736a698218327ad1f9df8ff0a177c7fe3495e190722358cc6",
+    "artifacts/tabular/season3/fold0.npz": "529bc072e1aac04c18a1dfdd23d2157e0165389a70727a8ba9ccb446e38eb9e0",
+    "artifacts/tabular/season3/fold1.json": "4a684935f470ae67be41fd1b4ec87fd19414095335a457c7d9692e8f4bae3c2e",
+    "artifacts/tabular/season3/fold1.npz": "7495b87555930ea36c76758c3235d34364cd215286ed44bfc8bd5057acb5ff95",
+    "artifacts/tabular/season3/fold2.json": "205a99e0b53e65f3f9c77387ad51e9c3c0b27c6133fe6d60ddd950e81f6a9b3c",
+    "artifacts/tabular/season3/fold2.npz": "d2a0ece0df94f86933ded82ccf85b22ac0fb526be007e42f5bb87bb7f15dd801",
+    "artifacts/neural/season1/protocol.json": "9a402214cd79b5f2c32a51c72f0665b9abf6193295b5bd79c00d04dff3d752a2",
+    "artifacts/neural/season1/models.npz": "b210716428ab849afa47196aea77a4d6c112542eb6f3bbc2a2bd02cd5f31643b",
+    "artifacts/neural/season1/cv_models.npz": "a7ac982edae2b703ca95d491f0c38cb3d6aab337f4256b9aed25a2f059d3e509",
+    "artifacts/neural/season1/evaluation.csv": "05de4b6a10588a2e0994bdc2173b609a2bb33e26a03fb19fc86bbee1435d6522",
+    "artifacts/calibration/season1/agent.npz": "9b3672ab347c1a272d6d1d3748cfe7df92e0502151316e7e6587af2aea41aee5",
+    "artifacts/calibration/season1/selection.json": "ba983f5c573c1b6eac71b71093c1202ee0c1cd0885bcf48244fc5549bcdc7589",
+    "artifacts/calibration/season1/cv.csv": "5d90d76aa7fd6b3789f32ba2cb522c983dc1c5a908e188d99124c0b255adb130",
+    "artifacts/neural/season2/protocol.json": "8afb6380f218d578676f25ad7bd33807150f0d4696d9759d29199737026c58fa",
+    "artifacts/neural/season2/models.npz": "49769d9353ff7a0b7e33e2c787314d07c9ce7267225af7c3c8809fd2693c488d",
+    "artifacts/neural/season2/cv_models.npz": "6f7230fc760e9f9c137321b58b618ebe2f6645ab7804efa11279e1acff4d3ee7",
+    "artifacts/neural/season2/evaluation.csv": "d798e7a076ae1bf1a52ee6c4cf94252265765ef87f85af46ea598cae1a945cf4",
+    "artifacts/calibration/season2/agent.npz": "1d7c65e9ddaf97a26d96eec1819d0e17e7653c37a2c1e22e55a2b086cc9bc645",
+    "artifacts/calibration/season2/selection.json": "9758e3408270f93174d09beae467e11e809b7582abe5c07e9cf605129e807f65",
+    "artifacts/calibration/season2/cv.csv": "92df59853adb413a23c54c9483908acb7148343bed822aaf8b5519ee34b57b17",
+    "artifacts/neural/season3/protocol.json": "20b521e72132188ebeebce02d61098b7630c273122f977e96c4ba672e7ab7439",
+    "artifacts/neural/season3/models.npz": "af32e60f6623f60eabd88e5bcdc0ff3a6bc542e2f1524ca685641cf641930f9a",
+    "artifacts/neural/season3/cv_models.npz": "9b407b043da9d05b6a9c643738c17916e589b448123451c05f87378ffee3540f",
+    "artifacts/neural/season3/evaluation.csv": "61ebc01ca8719a6401c34ff8c98e676d0aad4a371bbce1da773b2ae51e496681",
+    "artifacts/calibration/season3/agent.npz": "2ea733d86d4ad949369bcac1856256347a55cec7b643af1026c213d928d5c01e",
+    "artifacts/calibration/season3/selection.json": "e3cfd7e6cc1b1c81380b7527cc7bc6a0650868e2df46ba76ddf9a444cf4ff20c",
+    "artifacts/calibration/season3/cv.csv": "bf540a3c463e6ac9b8f7d6012bc3a1cd91e14f0b335a73ad89810e4178eaa16e"
+  },
+  "neural_provenance": {
+    "1": {
+      "selection": {
+        "primary": "campaign_dqn",
+        "iterations": {
+          "traffic_dqn": {
+            "episode": 6000,
+            "score": 144.35185185185185,
+            "objective": -9.211506156443765
+          },
+          "campaign_dqn": {
+            "episode": 6000,
+            "score": 143.61111111111111,
+            "objective": -8.873066897571157
+          }
+        },
+        "aggregation": "mean Q-values / mean latent actions across all configured seeds",
+        "criterion": "mean paired validation gain minus penalty times across-date SD",
+        "penalty": 0.5
+      },
+      "original_source_sha256": {
+        "bidpace/__init__.py": "711fbc811d46f8beb4d4666d128c09ffc466a7d479daf154dd4b989683433a67",
+        "bidpace/adaptive.py": "3ca7df70b811f307e745e0858767337e5920468b7a9701c280cd2b901c7fcebd",
+        "bidpace/agents.py": "00f5eaf9591658f8ac58f595ffa9851bd48f906762c6e87b420cd507cd099287",
+        "bidpace/benchmark.py": "f2be9e2638f8994dc42408ed7381dfdc476626a2986c578c11264705ad176605",
+        "bidpace/control.py": "81e4ac54d31887384fc3b5eeb90e492406fe665e840a8e606dd64856e678107c",
+        "bidpace/fetch.py": "2b97f7e388b73ab81e6e67d73ad58d841d6d74b8f58e6c970d74ee278ac195b9",
+        "bidpace/model_based.py": "b71335b8d0c91fded8d8e259f25f077f88a02e75569bfe34a095231c6249c005",
+        "bidpace/policies.py": "2e8c4d870cfb84f78220e496164d7403cfdcc38f669ab19e1f1877be9406b91d",
+        "bidpace/ppo.py": "b52894553329503aad8badc776f9e370762f7407ca518977eeb8be25673ccd3e",
+        "bidpace/protocol.py": "ee02473b31357a988cdc88ba55ba14f0a0590db99211355e0112db0e2f137c1e",
+        "bidpace/replay.py": "36c24bcae6b4f9a290bc1fcf4dc77b9f54c44ad30a0d1cf2a9a9386c326910cd",
+        "bidpace/reporting.py": "cb83c52f2f81d44898b003b78bd555f28d3a84227d0a0244f524e3b7c7f9aa1f",
+        "run.py": "24c0a9df4b05143b95c38d0ae26d7a8b4ec4f483b531e057a53d15cee9ee453e"
+      },
+      "current_source_matches": false
+    },
+    "2": {
+      "selection": {
+        "primary": "campaign_dqn",
+        "iterations": {
+          "traffic_dqn": {
+            "episode": 3000,
+            "score": 75.07777777777778,
+            "objective": -2.8699657706257335
+          },
+          "campaign_dqn": {
+            "episode": 6000,
+            "score": 78.92222222222223,
+            "objective": 0.8317266746310444
+          }
+        },
+        "aggregation": "mean Q-values / mean latent actions across all configured seeds",
+        "criterion": "mean paired validation gain minus penalty times across-date SD",
+        "penalty": 0.5
+      },
+      "original_source_sha256": {
+        "bidpace/__init__.py": "711fbc811d46f8beb4d4666d128c09ffc466a7d479daf154dd4b989683433a67",
+        "bidpace/adaptive.py": "3ca7df70b811f307e745e0858767337e5920468b7a9701c280cd2b901c7fcebd",
+        "bidpace/agents.py": "00f5eaf9591658f8ac58f595ffa9851bd48f906762c6e87b420cd507cd099287",
+        "bidpace/benchmark.py": "f2be9e2638f8994dc42408ed7381dfdc476626a2986c578c11264705ad176605",
+        "bidpace/control.py": "81e4ac54d31887384fc3b5eeb90e492406fe665e840a8e606dd64856e678107c",
+        "bidpace/fetch.py": "2b97f7e388b73ab81e6e67d73ad58d841d6d74b8f58e6c970d74ee278ac195b9",
+        "bidpace/model_based.py": "b71335b8d0c91fded8d8e259f25f077f88a02e75569bfe34a095231c6249c005",
+        "bidpace/policies.py": "2e8c4d870cfb84f78220e496164d7403cfdcc38f669ab19e1f1877be9406b91d",
+        "bidpace/ppo.py": "b52894553329503aad8badc776f9e370762f7407ca518977eeb8be25673ccd3e",
+        "bidpace/protocol.py": "ee02473b31357a988cdc88ba55ba14f0a0590db99211355e0112db0e2f137c1e",
+        "bidpace/replay.py": "36c24bcae6b4f9a290bc1fcf4dc77b9f54c44ad30a0d1cf2a9a9386c326910cd",
+        "bidpace/reporting.py": "cb83c52f2f81d44898b003b78bd555f28d3a84227d0a0244f524e3b7c7f9aa1f",
+        "run.py": "24c0a9df4b05143b95c38d0ae26d7a8b4ec4f483b531e057a53d15cee9ee453e"
+      },
+      "current_source_matches": false
+    },
+    "3": {
+      "selection": {
+        "primary": "traffic_dqn",
+        "iterations": {
+          "traffic_dqn": {
+            "episode": 1500,
+            "score": 69.94444444444444,
+            "objective": -11.325828797000412
+          },
+          "campaign_dqn": {
+            "episode": 3000,
+            "score": 65.72222222222221,
+            "objective": -15.965090287310074
+          }
+        },
+        "aggregation": "mean Q-values / mean latent actions across all configured seeds",
+        "criterion": "mean paired validation gain minus penalty times across-date SD",
+        "penalty": 0.5
+      },
+      "original_source_sha256": {
+        "bidpace/__init__.py": "711fbc811d46f8beb4d4666d128c09ffc466a7d479daf154dd4b989683433a67",
+        "bidpace/adaptive.py": "3ca7df70b811f307e745e0858767337e5920468b7a9701c280cd2b901c7fcebd",
+        "bidpace/agents.py": "00f5eaf9591658f8ac58f595ffa9851bd48f906762c6e87b420cd507cd099287",
+        "bidpace/benchmark.py": "f2be9e2638f8994dc42408ed7381dfdc476626a2986c578c11264705ad176605",
+        "bidpace/control.py": "81e4ac54d31887384fc3b5eeb90e492406fe665e840a8e606dd64856e678107c",
+        "bidpace/fetch.py": "2b97f7e388b73ab81e6e67d73ad58d841d6d74b8f58e6c970d74ee278ac195b9",
+        "bidpace/model_based.py": "b71335b8d0c91fded8d8e259f25f077f88a02e75569bfe34a095231c6249c005",
+        "bidpace/policies.py": "2e8c4d870cfb84f78220e496164d7403cfdcc38f669ab19e1f1877be9406b91d",
+        "bidpace/ppo.py": "b52894553329503aad8badc776f9e370762f7407ca518977eeb8be25673ccd3e",
+        "bidpace/protocol.py": "ee02473b31357a988cdc88ba55ba14f0a0590db99211355e0112db0e2f137c1e",
+        "bidpace/replay.py": "36c24bcae6b4f9a290bc1fcf4dc77b9f54c44ad30a0d1cf2a9a9386c326910cd",
+        "bidpace/reporting.py": "cb83c52f2f81d44898b003b78bd555f28d3a84227d0a0244f524e3b7c7f9aa1f",
+        "run.py": "24c0a9df4b05143b95c38d0ae26d7a8b4ec4f483b531e057a53d15cee9ee453e"
+      },
+      "current_source_matches": false
+    }
+  },
+  "table_provenance": {
+    "original_source_sha256": {
+      "bidpace/__init__.py": "711fbc811d46f8beb4d4666d128c09ffc466a7d479daf154dd4b989683433a67",
+      "bidpace/action_audit.py": "b6a41eeeeefc52652e3e427b22ad55cb9cc85235c44021ec4df6750a3e0df0b8",
+      "bidpace/adaptive.py": "3ca7df70b811f307e745e0858767337e5920468b7a9701c280cd2b901c7fcebd",
+      "bidpace/agents.py": "381f66d196881cde9845628f5473f567d89f4077aeb62849e2fb87a5009bed25",
+      "bidpace/benchmark.py": "1b108b0abb3e40a86e0ad6e15f558f98d628e5b77a476bed893b362d4950c06f",
+      "bidpace/control.py": "81e4ac54d31887384fc3b5eeb90e492406fe665e840a8e606dd64856e678107c",
+      "bidpace/fetch.py": "2b97f7e388b73ab81e6e67d73ad58d841d6d74b8f58e6c970d74ee278ac195b9",
+      "bidpace/model_based.py": "b71335b8d0c91fded8d8e259f25f077f88a02e75569bfe34a095231c6249c005",
+      "bidpace/policies.py": "2e8c4d870cfb84f78220e496164d7403cfdcc38f669ab19e1f1877be9406b91d",
+      "bidpace/ppo.py": "b52894553329503aad8badc776f9e370762f7407ca518977eeb8be25673ccd3e",
+      "bidpace/protocol.py": "2142cdd997a5ef1ccb717264c7ec0e07a8b28a4159ccf423ee322e9e1e3e3edf",
+      "bidpace/replay.py": "36c24bcae6b4f9a290bc1fcf4dc77b9f54c44ad30a0d1cf2a9a9386c326910cd",
+      "bidpace/reporting.py": "cb83c52f2f81d44898b003b78bd555f28d3a84227d0a0244f524e3b7c7f9aa1f",
+      "bidpace/tabular.py": "dec100eaff73de5adc812973905865badc0abc21e4ad479568ccbef284e29cb0",
+      "bidpace/tabular_study.py": "ec398afecbae53ac047c30c49349db9a72351d2fd1c52b2fb574f16154e3f6d8",
+      "run.py": "24c0a9df4b05143b95c38d0ae26d7a8b4ec4f483b531e057a53d15cee9ee453e"
+    },
+    "current_source_matches": false
+  },
+  "calibration_provenance": {
+    "original_script_sha256": "14898aae4eda065246dec2bb4998efb2c18e0dedff234a5e1a9c9d590e98cb77",
+    "current_script_matches": false
+  },
+  "seasonal_selection": "highest mean nominal forward-validation clicks, equal date weights",
+  "shared_selection": "highest mean across seasons of nominal CV / validation reference CV",
+  "disclosure": "Retrospective comparison on public data, not a blind prospective test. Imported neural checkpoints retain their original multi-condition forward-validation stopping rule; sampled-Q settings use nominal CV. Current algorithm selection replays nominal CV for all methods. No test-based selection or guaranteed RL superiority. Separate agents train within each season."
+}

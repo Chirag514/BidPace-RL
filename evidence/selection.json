@@ -1,0 +1,457 @@
+{
+  "1": {
+    "primary": "sampled_q",
+    "reference": "mpc",
+    "validation_scores": {
+      "budget_linear": 158.22222222222223,
+      "campaign_dqn": 154.88888888888889,
+      "campaign_linear": 158.22222222222223,
+      "constant": 151.44444444444446,
+      "linear": 156.2222222222222,
+      "market_linear": 160.0,
+      "mpc": 165.88888888888889,
+      "pid": 163.66666666666666,
+      "privileged_linear": 160.88888888888889,
+      "quality_pid": 165.33333333333334,
+      "sampled_q": 163.88888888888889,
+      "traffic_dqn": 152.2222222222222,
+      "traffic_linear": 159.7777777777778,
+      "unscaled": 155.55555555555557
+    },
+    "baselines": {
+      "constant": {
+        "alpha": 1.0,
+        "kind": "constant"
+      },
+      "linear": {
+        "alpha": 1.1558527219051673,
+        "kind": "linear"
+      },
+      "privileged_linear": {
+        "alpha": 1.1558527219051673,
+        "kind": "privileged_linear"
+      },
+      "campaign_linear": {
+        "kind": "linear",
+        "alphas": {
+          "1001": 1.1558527219051673,
+          "1002": 1.0,
+          "1003": 1.1558527219051673
+        },
+        "alpha": 1.1558527219051673
+      },
+      "budget_linear": {
+        "kind": "budget_linear",
+        "fractions": [
+          0.2,
+          0.3,
+          0.45
+        ],
+        "alphas": {
+          "1001": [
+            1.0,
+            1.1558527219051673,
+            1.3987698123704733
+          ],
+          "1002": [
+            0.7892507407819324,
+            1.0,
+            1.4
+          ],
+          "1003": [
+            0.7892507407819324,
+            1.1558527219051673,
+            1.3987698123704733
+          ]
+        },
+        "fallback": [
+          0.7892507407819324,
+          1.1558527219051673,
+          1.4
+        ]
+      },
+      "pid": {
+        "kind": "pid",
+        "alphas": {
+          "1001": 1.1558527219051673,
+          "1002": 1.0,
+          "1003": 1.1558527219051673
+        },
+        "alpha": 1.1558527219051673,
+        "factor": 0.7,
+        "parameters": {
+          "kp": 3.0,
+          "ki": 0.2,
+          "kd": 1.0
+        }
+      },
+      "quality_pid": {
+        "kind": "pid",
+        "alphas": {
+          "1001": 1.1558527219051673,
+          "1002": 1.0,
+          "1003": 1.1558527219051673
+        },
+        "alpha": 1.1558527219051673,
+        "factor": 0.7,
+        "parameters": {
+          "kp": 3.0,
+          "ki": 0.2,
+          "kd": 1.0,
+          "quality_power": -0.5,
+          "target": "volume"
+        }
+      },
+      "market_linear": {
+        "kind": "market_linear",
+        "alphas": {
+          "1001": 1.1558527219051673,
+          "1002": 1.0,
+          "1003": 1.1558527219051673
+        },
+        "alpha": 1.1558527219051673,
+        "factor": 1.0,
+        "rate": 0.1
+      },
+      "mpc": {
+        "kind": "mpc",
+        "rate": 0.0,
+        "reserve": 1.2
+      },
+      "traffic_linear": {
+        "kind": "traffic_linear",
+        "alphas": {
+          "1001": 1.1558527219051673,
+          "1002": 1.0,
+          "1003": 1.1558527219051673
+        },
+        "alpha": 1.1558527219051673,
+        "factor": 1.0,
+        "rate": 0.25,
+        "power": 0.7
+      },
+      "unscaled": {
+        "kind": "linear",
+        "alpha": 1.0
+      }
+    },
+    "data_sha256": "d5836e3263299e8b525ca3342f8d8cc9e51d2e2e0d6503e29c53b202225700ad",
+    "replay_arrays_sha256": "2efde17756cee8eed39a4338e8eb5b41df71b97954da317f021cc145d297f744",
+    "hashes": {
+      "validation.csv": "e6837e0c04868393d1cb279481232a4acd1c6ae28ef0536b75763a8acfa65b75",
+      "traffic_dqn.npz": "ee4c2c5881ab0eb081fef1339d135688fc0684dfe6c26c2b761ea0f56112b460",
+      "campaign_dqn.npz": "e73e1bc92430fe4042ab0982089d4069484c9eabc45f9cedd070ca52a407aca6",
+      "sampled_q.npz": "9b3672ab347c1a272d6d1d3748cfe7df92e0502151316e7e6587af2aea41aee5"
+    }
+  },
+  "2": {
+    "primary": "campaign_dqn",
+    "reference": "budget_linear",
+    "validation_scores": {
+      "budget_linear": 80.46666666666667,
+      "campaign_dqn": 84.0,
+      "campaign_linear": 80.46666666666667,
+      "constant": 75.26666666666667,
+      "linear": 74.93333333333334,
+      "market_linear": 79.73333333333333,
+      "mpc": 73.66666666666667,
+      "pid": 78.33333333333333,
+      "privileged_linear": 74.8,
+      "quality_pid": 78.33333333333333,
+      "sampled_q": 79.33333333333333,
+      "traffic_dqn": 75.93333333333334,
+      "traffic_linear": 78.93333333333334,
+      "unscaled": 72.33333333333333
+    },
+    "baselines": {
+      "constant": {
+        "alpha": 1.6927390063796164,
+        "kind": "constant"
+      },
+      "linear": {
+        "alpha": 2.0,
+        "kind": "linear"
+      },
+      "privileged_linear": {
+        "alpha": 1.6927390063796164,
+        "kind": "privileged_linear"
+      },
+      "campaign_linear": {
+        "kind": "linear",
+        "alphas": {
+          "1458": 0.9551217812396838,
+          "3358": 1.3987698123704733,
+          "3386": 2.0,
+          "3427": 2.0,
+          "3476": 1.0
+        },
+        "alpha": 2.0
+      },
+      "budget_linear": {
+        "kind": "budget_linear",
+        "fractions": [
+          0.2,
+          0.3,
+          0.45
+        ],
+        "alphas": {
+          "1458": [
+            0.7892507407819324,
+            0.9551217812396838,
+            1.1558527219051673
+          ],
+          "3358": [
+            1.6927390063796164,
+            1.3987698123704733,
+            1.3987698123704733
+          ],
+          "3386": [
+            2.048489550159194,
+            2.0,
+            2.048489550159194
+          ],
+          "3427": [
+            2.4790055769355552,
+            2.0,
+            2.4790055769355552
+          ],
+          "3476": [
+            1.0,
+            1.0,
+            1.3987698123704733
+          ]
+        },
+        "fallback": [
+          2.0,
+          2.0,
+          1.6927390063796164
+        ]
+      },
+      "pid": {
+        "kind": "pid",
+        "alphas": {
+          "1458": 0.9551217812396838,
+          "3358": 1.3987698123704733,
+          "3386": 2.0,
+          "3427": 2.0,
+          "3476": 1.0
+        },
+        "alpha": 2.0,
+        "factor": 1.0,
+        "parameters": {
+          "kp": 1.0,
+          "ki": 0.0,
+          "kd": 0.0
+        }
+      },
+      "quality_pid": {
+        "kind": "pid",
+        "alphas": {
+          "1458": 0.9551217812396838,
+          "3358": 1.3987698123704733,
+          "3386": 2.0,
+          "3427": 2.0,
+          "3476": 1.0
+        },
+        "alpha": 2.0,
+        "factor": 1.0,
+        "parameters": {
+          "kp": 1.0,
+          "ki": 0.0,
+          "kd": 0.0,
+          "quality_power": 0.0,
+          "target": "volume"
+        }
+      },
+      "market_linear": {
+        "kind": "market_linear",
+        "alphas": {
+          "1458": 0.9551217812396838,
+          "3358": 1.3987698123704733,
+          "3386": 2.0,
+          "3427": 2.0,
+          "3476": 1.0
+        },
+        "alpha": 2.0,
+        "factor": 1.0,
+        "rate": 0.1
+      },
+      "mpc": {
+        "kind": "mpc",
+        "rate": 0.25,
+        "reserve": 0.8
+      },
+      "traffic_linear": {
+        "kind": "traffic_linear",
+        "alphas": {
+          "1458": 0.9551217812396838,
+          "3358": 1.3987698123704733,
+          "3386": 2.0,
+          "3427": 2.0,
+          "3476": 1.0
+        },
+        "alpha": 2.0,
+        "factor": 1.0,
+        "rate": 0.25,
+        "power": 1.0
+      },
+      "unscaled": {
+        "kind": "linear",
+        "alpha": 1.0
+      }
+    },
+    "data_sha256": "466dbad4c12a6f30e2278a2f8f550f5cbc38821a365dd60130353a4921b9e103",
+    "replay_arrays_sha256": "8dd57d75d655951f985c535614ae08c11acf4b67d6920d8995a4b337a306f9be",
+    "hashes": {
+      "validation.csv": "7a98bb7835ddfb718b83a1753f2f38fbcd911518327abf3d3d6ad46b5d3b1532",
+      "traffic_dqn.npz": "97a0c6faa5ea0d7d61d587c7fdbcf55627c09fa6463a923d84e7791b2cbb3330",
+      "campaign_dqn.npz": "c077722ae60fe1186f7e23354d3cb7bb4f121ff4f28360ea618cfa56f56db366",
+      "sampled_q.npz": "1d7c65e9ddaf97a26d96eec1819d0e17e7653c37a2c1e22e55a2b086cc9bc645"
+    }
+  },
+  "3": {
+    "primary": "campaign_dqn",
+    "reference": "market_linear",
+    "validation_scores": {
+      "budget_linear": 83.16666666666667,
+      "campaign_dqn": 76.66666666666667,
+      "campaign_linear": 83.16666666666667,
+      "constant": 71.66666666666667,
+      "linear": 70.33333333333333,
+      "market_linear": 85.5,
+      "mpc": 55.333333333333336,
+      "pid": 84.5,
+      "privileged_linear": 70.66666666666667,
+      "quality_pid": 84.5,
+      "sampled_q": 71.0,
+      "traffic_dqn": 76.5,
+      "traffic_linear": 84.0,
+      "unscaled": 63.0
+    },
+    "baselines": {
+      "constant": {
+        "alpha": 2.0,
+        "kind": "constant"
+      },
+      "linear": {
+        "alpha": 2.0,
+        "kind": "linear"
+      },
+      "privileged_linear": {
+        "alpha": 2.0,
+        "kind": "privileged_linear"
+      },
+      "campaign_linear": {
+        "kind": "linear",
+        "alphas": {
+          "2259": 2.048489550159194,
+          "2821": 1.6927390063796164,
+          "2997": 0.7892507407819324
+        },
+        "alpha": 2.0
+      },
+      "budget_linear": {
+        "kind": "budget_linear",
+        "fractions": [
+          0.2,
+          0.3,
+          0.45
+        ],
+        "alphas": {
+          "2259": [
+            2.048489550159194,
+            2.048489550159194,
+            2.0
+          ],
+          "2821": [
+            1.1558527219051673,
+            1.6927390063796164,
+            2.048489550159194
+          ],
+          "2997": [
+            0.6521856626663094,
+            0.7892507407819324,
+            1.0
+          ]
+        },
+        "fallback": [
+          1.0,
+          1.6927390063796164,
+          2.0
+        ]
+      },
+      "pid": {
+        "kind": "pid",
+        "alphas": {
+          "2259": 2.048489550159194,
+          "2821": 1.6927390063796164,
+          "2997": 0.7892507407819324
+        },
+        "alpha": 2.0,
+        "factor": 1.3,
+        "parameters": {
+          "kp": 1.0,
+          "ki": 0.0,
+          "kd": 1.0
+        }
+      },
+      "quality_pid": {
+        "kind": "pid",
+        "alphas": {
+          "2259": 2.048489550159194,
+          "2821": 1.6927390063796164,
+          "2997": 0.7892507407819324
+        },
+        "alpha": 2.0,
+        "factor": 1.3,
+        "parameters": {
+          "kp": 1.0,
+          "ki": 0.0,
+          "kd": 1.0,
+          "quality_power": 0.0,
+          "target": "volume"
+        }
+      },
+      "market_linear": {
+        "kind": "market_linear",
+        "alphas": {
+          "2259": 2.048489550159194,
+          "2821": 1.6927390063796164,
+          "2997": 0.7892507407819324
+        },
+        "alpha": 2.0,
+        "factor": 1.0,
+        "rate": 0.1
+      },
+      "mpc": {
+        "kind": "mpc",
+        "rate": 0.5,
+        "reserve": 0.8
+      },
+      "traffic_linear": {
+        "kind": "traffic_linear",
+        "alphas": {
+          "2259": 2.048489550159194,
+          "2821": 1.6927390063796164,
+          "2997": 0.7892507407819324
+        },
+        "alpha": 2.0,
+        "factor": 1.2,
+        "rate": 0.5,
+        "power": 0.3
+      },
+      "unscaled": {
+        "kind": "linear",
+        "alpha": 1.0
+      }
+    },
+    "data_sha256": "e0ec62f35b9f8176546e080da0bbbc8328bdc723af7c0d4a20d15051796be1f2",
+    "replay_arrays_sha256": "cf81d1c13888a0684fb9417060d12c8550e03fe60fc68b3d9a7e100abc33f355",
+    "hashes": {
+      "validation.csv": "a7035e6a6b08aa3b0e83e28d340967ba38d80e256d5035bc3e20d6adbce3f613",
+      "traffic_dqn.npz": "6d6ada308562bebb3822169227a9b93730b21d02145899ed754e9aa45751c6a5",
+      "campaign_dqn.npz": "02a5a8888021c013ca11168587e5b746e515fff160972aaf47dcfdecd373996e",
+      "sampled_q.npz": "2ea733d86d4ad949369bcac1856256347a55cec7b643af1026c213d928d5c01e"
+    }
+  }
+}

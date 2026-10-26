@@ -1,5 +1,5 @@
 {
-  "data_file": "data/combined/replay.npz",
+  "data_file": "data/season2/replay.npz",
   "development_dates": [
     20130606,
     20130607,
@@ -7,23 +7,17 @@
     20130609,
     20130610,
     20130611,
-    20130612,
-    20131019,
-    20131020,
-    20131021,
-    20131022,
-    20131023,
-    20131024
+    20130612
   ],
   "test_dates": [
-    20131025,
-    20131026,
-    20131027
+    20130613,
+    20130614,
+    20130615
   ],
   "cv_validation_dates": [
-    20131022,
-    20131023,
-    20131024
+    20130610,
+    20130611,
+    20130612
   ],
   "seeds": [
     11,
@@ -35,8 +29,7 @@
   "workers": 4,
   "variants": [
     "traffic_dqn",
-    "traffic_ppo",
-    "residual_ppo"
+    "campaign_dqn"
   ],
   "gamma": 1.0,
   "evaluation_budget_fraction": 0.3,
@@ -94,27 +87,8 @@
     "target_every_updates": 250,
     "epsilon_final": 0.05
   },
-  "ppo": {
-    "episodes": 8192,
-    "checkpoints": [
-      0,
-      2048,
-      4096,
-      8192
-    ],
-    "batch_episodes": 64,
-    "epochs": 6,
-    "minibatch": 256,
-    "std_initial": 0.3,
-    "std_final": 0.05,
-    "actor_lr": 0.0003,
-    "critic_lr": 0.001,
-    "clip": 0.2,
-    "target_kl": 0.02,
-    "lambda": 1.0
-  },
   "traffic_baselines": true,
   "selection_penalty": 0.5,
   "selection_reference": "best_baseline",
-  "data_scope": "Season 2 June 6-12 auxiliary training; Season 3 October 19-24 development and October 25-27 evaluation. June 13-15 and Season 3 leaderboard excluded."
+  "data_scope": "Complete Season 2 public priced inventory. June 6-12 development; June 13-15 public leaderboard evaluation. Historical replication after earlier experiments."
 }

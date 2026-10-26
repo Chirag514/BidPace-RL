@@ -3,7 +3,6 @@
 import numpy as np
 from .adaptive import MarketFilter
 from .agents import DQNPolicy
-from .ppo import PPOPolicy
 
 
 def fit_control(data, quantiles=101):
@@ -91,38 +90,28 @@ class TrafficDQN(DQNPolicy):
         self.input_dim += 5
 
 
-class TrafficPPO(PPOPolicy):
-    requires_traffic = True
+class CampaignDQN(TrafficDQN):
+    """Condition action values on the known advertiser, using a training-only map.
 
-    def __init__(self, model):
-        super().__init__(model, history=True, relative=True)
-        self.input_dim += 5
+    Campaign identity is public at bidding time. Its one-hot code allows the
+    shared network to represent different reward/price relationships without
+    reading any held-out labels or changing the click reward.
+    """
 
-
-class ResidualPPO(PPOPolicy):
-    """Learn bounded corrections around a training-calibrated cost controller."""
-
-    requires_traffic = True
-
-    def __init__(self, model, spec):
-        super().__init__(model, history=True, relative=False)
-        self.input_dim += 6  # Five public features and the current controller bid.
-        self.controller = CostController(spec["controller"])
-        self.residual_scale = float(spec.get("residual_scale", 0.5))
+    def __init__(self, model, campaigns):
+        super().__init__(model)
+        self.campaigns = tuple(map(int, campaigns))
+        self.input_dim += len(self.campaigns)
+        self.context = None
 
     def reset(self, day):
-        super().reset(day)
-        self.controller.reset(day)
+        if day.advertiser not in self.campaigns:
+            raise ValueError("Campaign DQN requires an advertiser seen in training")
+        self.context = np.zeros(len(self.campaigns), dtype=np.float32)
+        self.context[self.campaigns.index(day.advertiser)] = 1.0
 
     def encode(self, obs):
-        self.base = self.controller.forecast(obs)
-        self.current_obs = np.asarray(obs).copy()
-        return np.r_[super().encode(obs), self.base / 3.0].astype(np.float32)
+        if self.context is None:
+            raise RuntimeError("Reset the campaign policy before encoding")
+        return np.r_[super().encode(obs), self.context].astype(np.float32)
 
-    def apply(self, latent):
-        self.alpha = float(
-            np.clip(self.base * np.exp(self.residual_scale * np.tanh(latent)), 0.0, 3.0)
-        )
-        # The market filter must record the executed correction, not its proposal.
-        self.controller.record(self.current_obs, self.alpha)
-        return self.alpha

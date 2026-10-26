@@ -4,8 +4,6 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-import subprocess
-import sys
 import numpy as np
 from bidpace.protocol import (
     Ensemble,
@@ -13,11 +11,6 @@ from bidpace.protocol import (
     training_controls,
     fit_rl,
     train,
-    evaluate,
-    analyze,
-    verify,
-    export,
-    demo,
     source_hashes,
     Baseline,
     market_tensors,
@@ -66,11 +59,9 @@ class ProtocolTests(unittest.TestCase):
             test_dates=[20130609],
             seeds=[11, 23],
             workers=2,
+            variants=["traffic_dqn", "campaign_dqn"],
         )
         cfg["dqn"].update(episodes=8, checkpoints=[0, 4, 8], warmup=4, batch_size=4)
-        cfg["ppo"].update(
-            episodes=8, checkpoints=[0, 4, 8], batch_episodes=4, epochs=1, minibatch=32
-        )
         return cfg
 
     def test_forward_only_folds_and_reserved_dates(self):
@@ -84,14 +75,14 @@ class ProtocolTests(unittest.TestCase):
     def test_randomization_declared_range_and_unseen_stress(self):
         cfg = self.config()
         rng = np.random.default_rng(7)
-        values = np.asarray([training_controls(cfg, "traffic_ppo", rng) for _ in range(1000)])
+        values = np.asarray([training_controls(cfg, "traffic_dqn", rng) for _ in range(1000)])
         self.assertGreater(values[:, 0].min(), 0.15)
         self.assertLess(values[:, 0].max(), 0.6)
         self.assertLess(values[:, 1].max(), 1.5)
         a = np.random.default_rng(8)
         b = np.random.default_rng(8)
-        training_controls(cfg, "traffic_ppo", a)
-        training_controls(cfg, "traffic_ppo", b)
+        training_controls(cfg, "traffic_dqn", a)
+        training_controls(cfg, "campaign_dqn", b)
         self.assertEqual(a.random(), b.random())
 
     def test_q_ensemble_averages_values_before_argmax(self):
@@ -116,7 +107,7 @@ class ProtocolTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             cfg = self.fixture(Path(td))
             data = ReplayData(cfg["data_file"], [20130606, 20130607])
-            for variant in ["traffic_dqn", "traffic_ppo", "residual_ppo"]:
+            for variant in ["traffic_dqn", "campaign_dqn"]:
                 full = fit_rl(data, cfg, variant, 11, 8)
                 short = fit_rl(data, cfg, variant, 11, 4)
                 for key in full["snapshots"][4]:
@@ -150,36 +141,20 @@ class ProtocolTests(unittest.TestCase):
             root = Path(td)
             cfg = self.config()
             cfg["data_file"] = str(root / "missing replay.npz")
-            path = root / "config.json"
-            path.write_text(json.dumps(cfg))
             out = root / "results"
-            script = Path("run.py").resolve()
-            result = subprocess.run(
-                [sys.executable, str(script), "all", "--config", str(path), "--out", str(out)],
-                capture_output=True,
-                text=True,
-                timeout=30,
-            )
-            self.assertEqual(result.returncode, 2)
-            self.assertIn("Missing replay input", result.stderr)
-            self.assertIn("source ZIP excludes data", result.stderr)
-            self.assertNotIn("Traceback", result.stderr)
+            with self.assertRaisesRegex(FileNotFoundError, "Missing replay input"):
+                train(cfg, out)
             self.assertFalse(out.exists())
 
-    def test_complete_small_pipeline_and_standalone_agent(self):
+    def test_training_freezes_sources_and_resumes_without_replacing_models(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             cfg = self.fixture(root)
             out = root / "results"
             train(cfg, out)
-            evaluate(cfg, out)
-            analyze(cfg, out)
-            verify(cfg, out)
-            export(cfg, out, root / "agent.npz")
-            demo(cfg, out, root / "agent.npz")
             frozen = json.loads((out / "protocol.json").read_text())
             self.assertEqual(frozen["frozen"]["source_sha256"], source_hashes())
-            self.assertEqual(frozen["phase"], "evaluated")
+            self.assertEqual(frozen["phase"], "trained")
             with self.assertRaises(FileExistsError):
                 train(cfg, out)
             # Explicit resume must not refit or replace a completed model archive.

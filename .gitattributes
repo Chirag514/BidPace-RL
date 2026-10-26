@@ -1,3 +1,6 @@
 * text=auto eol=lf
 *.npz binary
 *.png binary
+
+# Frozen evidence is checksummed as bytes; preserve generated CSV/JSON line endings.
+/evidence/* -text whitespace=cr-at-eol

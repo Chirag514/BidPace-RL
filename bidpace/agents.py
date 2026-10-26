@@ -1,15 +1,77 @@
-"""NumPy Q-networks, n-step replay memory and greedy DQN policies."""
+"""NumPy Double DQN: Q-network, uniform replay and n-step targets."""
 
 import numpy as np
 
-ACTIONS = np.array([0.0, 0.1, 0.2, 0.35, 0.5, 0.7, 1.0, 1.4, 2.0, 3.0])
 OBS_DIM = 8
+ACTIONS = np.array([0.0, .1, .2, .35, .5, .7, 1.0, 1.4, 2.0, 3.0])
+N_ACTIONS = len(ACTIONS)
 
+class Replay:
+    """Fixed-capacity ring buffer for n-step transitions."""
+
+    def __init__(self, capacity=80000, input_dim=OBS_DIM):
+        self.capacity, self.size, self.pos = (capacity, 0, 0)
+        self.s = np.zeros((capacity, input_dim), dtype=np.float32)
+        self.ns = np.zeros_like(self.s)
+        self.a = np.zeros(capacity, dtype=np.int64)
+        self.r = np.zeros(capacity, dtype=np.float32)
+        self.discount = np.zeros(capacity, dtype=np.float32)
+
+    def add(self, s, a, r, ns, discount):
+        i = self.pos
+        self.s[i], self.a[i], self.r[i], self.ns[i], self.discount[i] = (s, a, r, ns, discount)
+        self.pos = (self.pos + 1) % self.capacity
+        self.size = min(self.size + 1, self.capacity)
+
+    def sample(self, rng, n):
+        i = rng.integers(0, self.size, n)
+        return (self.s[i], self.a[i], self.r[i], self.ns[i], self.discount[i])
+
+def bellman(online, target, rewards, next_states, discount, double=True):
+    """Compute conventional or Double DQN bootstrap targets."""
+    values = target(next_states)
+    if double:
+        a = online(next_states).argmax(axis=1)
+        bootstrap = values[np.arange(len(a)), a]
+    else:
+        bootstrap = values.max(axis=1)
+    return rewards + discount * bootstrap
+
+class DQNPolicy:
+    """Choose an absolute bid multiplier by maximizing learned action values."""
+
+    def __init__(self, model):
+        self.model = model
+        self.actions = ACTIONS
+        self.input_dim = OBS_DIM
+
+    def reset(self, day):
+        # The feed-forward controller keeps no private episode state.
+        pass
+
+    def encode(self, obs):
+        return np.asarray(obs, dtype=np.float32)
+
+    def apply(self, action):
+        return float(self.actions[action])
+
+    def act(self, obs):
+        return self.apply(int(self.model(self.encode(obs)).argmax()))
+
+def emit_nstep(queue, replay, n=3, gamma=1.0, flush=False):
+    while len(queue) >= n or (flush and queue):
+        seq = list(queue)[:n]
+        reward = sum((gamma**i * x[2] for i, x in enumerate(seq)))
+        terminal = any((x[4] for x in seq))
+        replay.add(seq[0][0], seq[0][1], reward, seq[-1][3], 0.0 if terminal else gamma ** len(seq))
+        queue.popleft()
+        if not flush and len(queue) < n:
+            break
 
 class MLP:
     """Two-hidden-layer Q-network with manual backpropagation and Adam."""
 
-    def __init__(self, seed=0, hidden=(48, 32), input_dim=OBS_DIM, output_dim=len(ACTIONS)):
+    def __init__(self, seed=0, hidden=(48, 32), input_dim=OBS_DIM, output_dim=N_ACTIONS):
         rng = np.random.default_rng(seed)
         dims = (input_dim, *hidden, output_dim)
         self.p = {}
@@ -70,70 +132,3 @@ class MLP:
 
     def copy_from(self, other):
         self.p = {k: v.copy() for k, v in other.p.items()}
-
-
-class Replay:
-    """Fixed-capacity ring buffer for n-step transitions."""
-
-    def __init__(self, capacity=80000, input_dim=OBS_DIM):
-        self.capacity, self.size, self.pos = (capacity, 0, 0)
-        self.s = np.zeros((capacity, input_dim), dtype=np.float32)
-        self.ns = np.zeros_like(self.s)
-        self.a = np.zeros(capacity, dtype=np.int64)
-        self.r = np.zeros(capacity, dtype=np.float32)
-        self.discount = np.zeros(capacity, dtype=np.float32)
-
-    def add(self, s, a, r, ns, discount):
-        i = self.pos
-        self.s[i], self.a[i], self.r[i], self.ns[i], self.discount[i] = (s, a, r, ns, discount)
-        self.pos = (self.pos + 1) % self.capacity
-        self.size = min(self.size + 1, self.capacity)
-
-    def sample(self, rng, n):
-        i = rng.integers(0, self.size, n)
-        return (self.s[i], self.a[i], self.r[i], self.ns[i], self.discount[i])
-
-
-def bellman(online, target, rewards, next_states, discount, double=True):
-    """Compute conventional or Double DQN bootstrap targets."""
-    values = target(next_states)
-    if double:
-        a = online(next_states).argmax(axis=1)
-        bootstrap = values[np.arange(len(a)), a]
-    else:
-        bootstrap = values.max(axis=1)
-    return rewards + discount * bootstrap
-
-
-def emit_nstep(queue, replay, n=3, gamma=1.0, flush=False):
-    """Emit exactly one transition per original step, including terminal tails."""
-    while len(queue) >= n or (flush and queue):
-        seq = list(queue)[:n]
-        reward = sum((gamma**i * x[2] for i, x in enumerate(seq)))
-        terminal = any((x[4] for x in seq))
-        replay.add(seq[0][0], seq[0][1], reward, seq[-1][3], 0.0 if terminal else gamma ** len(seq))
-        queue.popleft()
-        if not flush and len(queue) < n:
-            break
-
-
-class DQNPolicy:
-    """Choose an absolute bid multiplier by maximizing learned action values."""
-
-    def __init__(self, model):
-        self.model = model
-        self.actions = ACTIONS
-        self.input_dim = OBS_DIM
-
-    def reset(self, day):
-        # The feed-forward controller keeps no private episode state.
-        pass
-
-    def encode(self, obs):
-        return np.asarray(obs, dtype=np.float32)
-
-    def apply(self, action):
-        return float(self.actions[action])
-
-    def act(self, obs):
-        return self.apply(int(self.model(self.encode(obs)).argmax()))

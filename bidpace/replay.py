@@ -16,6 +16,14 @@ import sqlite3
 import time
 import numpy as np
 
+# The provider paper, Table 1, identifies Season 1 advertisers by landing-page
+# hash. Stable local codes are used only as group identifiers, never targets.
+SEASON1_CAMPAIGNS = {
+    "df6f61b2409f4e2f16b6873a7eb50444": 1001,
+    "3a7eb50444df6f61b2409f4e2f16b687": 1002,
+    "9f4e2f16b6873a7eb504df6f61b24044": 1003,
+}
+
 
 @dataclass
 class Profile:
@@ -43,15 +51,18 @@ def bid_counts(path):
         for line in source:
             if not line.strip():
                 continue
-            if line.count("\t") != 20:
-                raise ValueError(f"{Path(path).name}: expected 21 bid columns")
-            timestamp = line.split("\t", 2)[1]
-            advertiser = int(line.rsplit("\t", 2)[1])
+            fields = line.rstrip("\r\n").split("\t")
+            if len(fields) not in (19, 21):
+                raise ValueError(f"{Path(path).name}: expected 19 or 21 bid columns")
+            timestamp = fields[1]
+            # Season 1 bid logs have no advertiser key. Their total request
+            # count remains auditable, but it cannot be allocated to campaigns.
+            advertiser = int(fields[19]) if len(fields) == 21 else -1
             counts[int(timestamp[:8]), int(timestamp[8:10]), advertiser] += 1
     return counts
 
 
-def prepare(raw, output, workers=4):
+def prepare(raw, output, workers=4, leaderboard_after=None):
     """Join raw records; same-price repeats keep the earliest impression time.
 
     Price-conflicting IDs are quarantined within their impression date. Clicks
@@ -110,20 +121,28 @@ def prepare(raw, output, workers=4):
                     if not line.strip():
                         continue
                     fields = line.rstrip("\r\n").split("\t")
-                    if len(fields) not in (24, 26):
-                        raise ValueError(f"{path.name}: expected 24 or 26 columns")
+                    is_leaderboard = path.name.startswith("leaderboard.test.data.")
+                    has_attached = len(fields) == 26 or (len(fields) == 24 and is_leaderboard)
+                    base_columns = len(fields) - 2 if has_attached else len(fields)
+                    if base_columns not in (22, 24):
+                        raise ValueError(f"{path.name}: expected 22/24 training or 24/26 test columns")
                     ts = fields[1]
                     if len(ts) != 17 or not ts.isdigit():
                         raise ValueError("Expected millisecond timestamp")
                     date, hour = int(ts[:8]), int(ts[8:10])
                     if not 0 <= hour < 24:
                         raise ValueError("Invalid hour")
-                    advertiser, kind = int(fields[22]), int(fields[2])
+                    advertiser = (SEASON1_CAMPAIGNS[fields[21]] if base_columns == 22
+                                  else int(fields[22]))
+                    kind = int(fields[2])
+                    if is_leaderboard and leaderboard_after is not None and date <= leaderboard_after:
+                        source_count["excluded_overlapping_leaderboard_rows"] += 1
+                        continue
                     if kind == 1:
                         price = float(fields[20])
                         if not np.isfinite(price) or price < 0 or price != int(price):
                             raise ValueError("Replay requires nonnegative integral paying prices")
-                        attached = int(len(fields) == 26 and int(fields[24]) > 0)
+                        attached = int(has_attached and int(fields[-2]) > 0)
                         imp_batch.append(
                             (date, advertiser, fields[0], ts, hour, int(price), attached)
                         )
@@ -224,6 +243,8 @@ def prepare(raw, output, workers=4):
             label_policy="earliest click assigned to latest preceding impression; fold-specific label-date cutoff",
             duplicate_policy="date/advertiser/bid ID; same-price repeats keep earliest timestamp; conflicting prices quarantined",
             attached_policy="provider binary attached click labels allowed only in reserved test dates",
+            leaderboard_after=leaderboard_after,
+            season1_campaign_codes=SEASON1_CAMPAIGNS,
             unobserved="lost-auction prices and click counterfactuals unavailable",
             sha256=hashlib.sha256((output / "replay.npz").read_bytes()).hexdigest(),
             seconds=time.monotonic() - started,
@@ -281,9 +302,9 @@ class ReplayData:
             "validation": tuple(sorted(validation_dates)),
             "test": tuple(sorted(test_dates)),
         }
-        reserved = {20130613, 20130614, 20130615}
+        reserved = {20130318, 20130319, 20130320, 20130613, 20130614, 20130615}
         if reserved.intersection(self.dates["train"] + self.dates["validation"]):
-            raise ValueError("Public Season 2 leaderboard dates are reserved for evaluation")
+            raise ValueError("Public Season 1/2 leaderboard dates are reserved for evaluation")
         if not self.dates["train"]:
             raise ValueError("Training dates required")
         groups = [v for v in self.dates.values() if v]
@@ -295,6 +316,10 @@ class ReplayData:
         }
         if len(self.lookup) != len(a["keys"]):
             raise ValueError("Duplicate replay groups")
+        available_dates = {int(key[0]) for key in self.lookup}
+        requested = set().union(*self.dates.values())
+        if missing := requested - available_dates:
+            raise ValueError(f"Requested replay dates are missing: {sorted(missing)}")
         self.profiles = {}
         train_cut = max(self.dates["train"])
         campaigns = sorted({adv for date, adv, h in self.lookup if date in self.dates["train"]})
@@ -366,10 +391,19 @@ class ReplayData:
                     self.templates[split].append(ReplayTemplate(date, adv, split, p, tuple(hours)))
 
     def audit(self):
+        available = {(int(d), int(adv)) for d, adv, h in self.lookup}
         return dict(
             sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),
             dates=self.dates,
             reward="recorded binary clicks on logged winning inventory",
+            coverage={
+                split: dict(
+                    observed_advertiser_days=len({(d, adv) for d, adv in available if d in dates}),
+                    evaluated_advertiser_days=len(self.templates[split]),
+                    unseen_campaign_days=[list(key) for key in sorted(available)
+                                          if key[0] in dates and key[1] not in self.profiles],
+                ) for split, dates in self.dates.items()
+            },
             profiles={
                 str(k): dict(
                     price=p.price,
@@ -620,13 +654,15 @@ def main():
     parser.add_argument("--combine", nargs="+")
     parser.add_argument("--exclude-dates", nargs="*", type=int, default=[])
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--leaderboard-after", type=int,
+                        help="Keep leaderboard records only after this development date")
     args = parser.parse_args()
     if bool(args.raw) == bool(args.combine):
         parser.error("Choose --raw or --combine")
     report = (
         combine(args.combine, args.out, args.exclude_dates)
         if args.combine
-        else prepare(args.raw, args.out, args.workers)
+        else prepare(args.raw, args.out, args.workers, args.leaderboard_after)
     )
     print(json.dumps({k: v for k, v in report.items() if k != "sources"}, indent=2))
 

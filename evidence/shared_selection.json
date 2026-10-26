@@ -1,0 +1,14 @@
+{
+  "primary": "campaign_dqn",
+  "normalized_validation_scores": {
+    "traffic_dqn": 0.9186714510397008,
+    "campaign_dqn": 0.9580957459089926,
+    "sampled_q": 0.9347561957080952
+  },
+  "selection_sha256": {
+    "1": "dd86964e57cad658c49f074fe03be2933dca576993de9b63ecee6693d13c30ce",
+    "2": "0af13d29240598e9be729fb57da6796b43f31eda68bff5e48ad6430737c4e0eb",
+    "3": "6e7adbd358df5735b1b62b1223b6c569fcbd6328551ef6b8ec84fb100ec85c32"
+  },
+  "interpretation": "One common algorithm family; separate within-season trained agents. Cross-season validation selection is a historical study, not an earliest-season chronological deployment claim."
+}

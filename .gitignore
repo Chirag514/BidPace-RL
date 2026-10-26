@@ -1,21 +1,18 @@
-# Data and full training/verification caches stay local.
+# Local datasets, preparation and reusable training/evaluation caches.
 /data/
-/results/*
-/my_run/
-/reproduction/
+/prepared_inputs/
+/artifacts/
+/results/
+/reports/
 *.npz
 *.csv
 *.png
 *.pdf
 
-# Publish only these standalone agents and reviewed evidence files.
-!/agents/primary_agent.npz
-!/agents/empirical_agent.npz
-!/results/final_summary.csv
-!/results/final_evaluation.csv
-!/results/candidate_comparisons.json
-!/Report.pdf
-!/paired_gains.png
+# Publish only the trained comparison policies and reviewed evidence.
+!/agents/comparison/*.npz
+!/evidence/*.csv
+!/evidence/nominal.png
 
 # Environments, credentials and Python caches.
 .venv/

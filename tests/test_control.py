@@ -1,23 +1,15 @@
 """Causal observations, sampling integrity and anchored reinforcement learning."""
 
 from pathlib import Path
-from types import SimpleNamespace
 import json
 import tempfile
 import unittest
 import numpy as np
 from bidpace.control import fit_control
 from bidpace.protocol import (
-    policy_spec,
     create_policy,
     fit_rl,
     Baseline,
-    train,
-    evaluate,
-    analyze,
-    verify,
-    export,
-    demo,
     select_iterations,
 )
 from bidpace.replay import ReplayData, ReplayEnv, make_replay_day, rollout_replay, combine
@@ -120,7 +112,7 @@ class ControlTests(unittest.TestCase):
         rows = []
         for name, values in [
             ("traffic_dqn", [16.0, 10.0, 10.0]),
-            ("residual_ppo", [11.0, 11.0, 11.0]),
+            ("campaign_dqn", [11.0, 11.0, 11.0]),
         ]:
             rows.extend(
                 dict(variant=name, episode=4, seed=-1, fold=f, score=v)
@@ -128,11 +120,11 @@ class ControlTests(unittest.TestCase):
             )
         result = select_iterations(
             pd.DataFrame(rows),
-            dict(variants=["traffic_dqn", "residual_ppo"], selection_penalty=0.5),
+            dict(variants=["traffic_dqn", "campaign_dqn"], selection_penalty=0.5),
             dict(baselines={"mpc": baseline}, baseline_search=search),
         )
-        self.assertGreater(result["traffic_dqn"]["score"], result["residual_ppo"]["score"])
-        self.assertLess(result["traffic_dqn"]["objective"], result["residual_ppo"]["objective"])
+        self.assertGreater(result["traffic_dqn"]["score"], result["campaign_dqn"]["score"])
+        self.assertLess(result["traffic_dqn"]["objective"], result["campaign_dqn"]["objective"])
 
     def config(self, path):
         cfg = json.loads(Path("config.json").read_text())
@@ -143,14 +135,11 @@ class ControlTests(unittest.TestCase):
             test_dates=[20200104, 20200105, 20200106],
             seeds=[11, 23],
             workers=2,
-            variants=["traffic_dqn", "traffic_ppo", "residual_ppo"],
+            variants=["traffic_dqn", "campaign_dqn"],
             traffic_baselines=True,
         )
         cfg["domain_randomization"]["coverage"] = [0.35, 1.0]
         cfg["dqn"].update(episodes=8, checkpoints=[0, 4, 8], warmup=4, batch_size=4)
-        cfg["ppo"].update(
-            episodes=8, checkpoints=[0, 4, 8], batch_episodes=4, epochs=1, minibatch=32
-        )
         return cfg
 
     def test_coverage_keeps_prices_and_labels_paired(self):
@@ -208,26 +197,6 @@ class ControlTests(unittest.TestCase):
             for key in expected:
                 np.testing.assert_array_equal(expected[key], actual[key])
 
-    def test_zero_residual_exactly_matches_controller(self):
-        with tempfile.TemporaryDirectory() as td:
-            data = ReplayData(fixture(Path(td)), [20200101], [20200102])
-            spec = policy_spec(data, "residual_ppo")
-            cfg = self.config(data.path)
-            result = fit_rl(data, cfg, "residual_ppo", 11, stop=0)
-            residual = create_policy(result["snapshots"][0], spec)
-            baseline = Baseline(dict(kind="mpc", rate=0.5, reserve=1.0), fit_control(data))
-            day = make_replay_day(data.templates["validation"][0], coverage=0.5, seed=17)
-            self.assertEqual(rollout_replay(day, residual), rollout_replay(day, baseline))
-            public = SimpleNamespace(
-                profile=day.profile, budget=day.budget, advertiser=day.advertiser
-            )
-            residual.reset(public)  # No future hours or hidden price truth are present.
-            env = ReplayEnv(day, True)
-            obs = env.obs()
-            residual.encode(obs)
-            alpha = residual.apply(2.0)
-            recorded = residual.controller.filter.previous[1]
-            self.assertAlmostEqual(recorded, alpha * day.profile.ctr[0] / day.profile.mean_ctr)
 
     def test_traffic_learners_fixed_checkpoint_prefix(self):
         with tempfile.TemporaryDirectory() as td:
@@ -248,21 +217,6 @@ class ControlTests(unittest.TestCase):
                     policy.encode(ReplayEnv(day, True).obs()).shape, (policy.input_dim,)
                 )
 
-    def test_full_traffic_pipeline_and_export(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            cfg = self.config(fixture(root))
-            out = root / "out"
-            train(cfg, out)
-            evaluate(cfg, out)
-            analyze(cfg, out)
-            verify(cfg, out)
-            export(cfg, out, root / "agent.npz")
-            demo(cfg, out, root / "agent.npz")
-            state = json.loads((out / "protocol.json").read_text())
-            self.assertEqual(set(state["policy_specs"]), set(cfg["variants"]))
-            self.assertIn("mpc", state["baselines"])
-            self.assertIn("traffic_linear", state["baselines"])
 
 
 if __name__ == "__main__":

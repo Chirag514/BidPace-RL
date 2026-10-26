@@ -1,4 +1,4 @@
-"""Download selected Season 2/3 bid, impression and click logs with provider MD5s.
+"""Download public iPinYou logs with provider MD5 verification.
 
 Completed verified downloads are reused. Partial transfers retain a .part suffix
 and are ignored by replay preparation.
@@ -17,17 +17,25 @@ DATASET = "lastsummer/ipinyou"
 PREFIX = "ipinyou.contest.dataset/"
 
 
-def selected(name, season=2):
+def selected(name, season=2, scope="training", include_test=False):
+    """Select log roles explicitly; tests stay separate from training semantics.
+
+    ``training`` preserves the original bid/imp/clk download scope. ``priced``
+    omits bid-request logs: losing prices are unobserved and those logs are not
+    training examples for this conditional winning-inventory replay.
+    """
+    if season not in (1, 2, 3) or scope not in ("training", "priced"):
+        raise ValueError("Unsupported season or download scope")
     relative = name.removeprefix(PREFIX)
-    if season == 3:
-        return bool(
-            re.fullmatch(
-                r"training3rd/(bid|imp|clk)\.201310(19|20|21|22|23|24|25|26|27)\.txt\.bz2", relative
-            )
-        )
-    return bool(
-        re.fullmatch(r"training2nd/(bid|imp|clk)\.201306(06|07|08|09|10|11|12)\.txt\.bz2", relative)
-    )
+    ordinal = {1: "1st", 2: "2nd", 3: "3rd"}[season]
+    tests = {1: "20130318_20", 2: "20130613_15", 3: "20131021_28"}
+    if include_test and relative == f"testing{ordinal}/leaderboard.test.data.{tests[season]}.txt.bz2":
+        return True
+    dates = {1: r"201303(11|12|13|14|15|16|17)",
+             2: r"201306(06|07|08|09|10|11|12)",
+             3: r"201310(19|20|21|22|23|24|25|26|27)"}[season]
+    roles = "imp|clk" if scope == "priced" else "bid|imp|clk"
+    return bool(re.fullmatch(rf"training{ordinal}/({roles})\.{dates}\.txt\.bz2", relative))
 
 
 def md5_file(path):
@@ -60,7 +68,7 @@ def download_file(name, root, expected_size=None, expected_md5=None):
     return target
 
 
-def fetch(root, workers=4, season=2):
+def fetch(root, workers=4, season=2, scope="training", include_test=False):
     root = Path(root)
     metadata = []
     token = None
@@ -77,8 +85,8 @@ def fetch(root, workers=4, season=2):
     names = [item["name"] for item in metadata]
     if len(names) != len(set(names)):
         raise ValueError("provider listing contains duplicate names")
-    chosen = [item for item in metadata if selected(item["name"], season)]
-    expected_count = 21 if season == 2 else 27
+    chosen = [item for item in metadata if selected(item["name"], season, scope, include_test)]
+    expected_count = (9 if season == 3 else 7) * (2 if scope == "priced" else 3) + int(include_test)
     if len(chosen) != expected_count:
         raise ValueError(
             f"expected {expected_count} Season {season} files, got {len(chosen)}; inspect changed provider listing"
@@ -96,7 +104,7 @@ def fetch(root, workers=4, season=2):
 
     with ThreadPoolExecutor(max_workers=workers) as executor:
         verified = list(executor.map(get, chosen))
-    report = dict(dataset=DATASET, scope=f"public Season {season} selected logs", files=verified)
+    report = dict(dataset=DATASET, scope=f"public Season {season} {scope} logs", include_test=include_test, files=verified)
     (root / "download_manifest.json").write_text(json.dumps(report, indent=2) + "\n")
     return report
 
@@ -107,12 +115,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", default="data/raw")
     parser.add_argument("--workers", type=int, default=4)
-    parser.add_argument("--season", type=int, choices=[2, 3], default=2)
+    parser.add_argument("--season", type=int, choices=[1, 2, 3], default=2)
+    parser.add_argument("--scope", choices=["training", "priced"], default="training")
+    parser.add_argument("--include-test", action="store_true", help="Also download the public leaderboard; never use its labels for fitting")
     args = parser.parse_args()
     if args.workers < 1:
         parser.error("--workers must be positive")
     try:
-        fetch(args.out, args.workers, args.season)
+        fetch(args.out, args.workers, args.season, args.scope, args.include_test)
     except (OSError, ValueError, KeyError) as error:
         parser.exit(1, f"Download failed: {error}. Keep completed files and rerun the command.\n")
 
